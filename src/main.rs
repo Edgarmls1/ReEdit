@@ -209,8 +209,6 @@ fn main() -> io::Result<()> {
 
     terminal::disable_raw_mode()?;
 
-    Command::new("reset").status()?;
-
     Ok(())
 }
 
