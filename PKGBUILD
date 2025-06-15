@@ -11,11 +11,9 @@ source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-    cd "$pkgname-$pkgver"
     cargo build --release
 }
 
 package() {
-    cd "$pkgname-$pkgver"
     install -Dm755 "target/release/reedit" "$pkgdir/usr/bin/reedit"
 }
