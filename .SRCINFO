@@ -1,0 +1,13 @@
+pkgbase = reedit
+	pkgdesc = a terminal text editor written in rust
+	pkgver = 1.0.0
+	pkgrel = 1
+	url = https://github.com/Edgarmls1/ReEdit
+	arch = x86_64
+	license = MIT
+	depends = gcc
+	depends = rust
+	source = reedit-1.0.0.tar.gz::https://github.com/Edgarmls1/ReEdit/archive/refs/tags/v1.0.0.tar.gz
+	sha256sums = SKIP
+
+pkgname = reedit
