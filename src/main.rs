@@ -35,7 +35,7 @@ fn main() -> io::Result<()> {
                 (KeyCode::Enter, _) if matches!(editor.mode, editor::Mode::Command) => {
                     match editor.command.as_str() {
                         ":w" => { 
-                        editor.save()?; 
+                            editor.save()?; 
                             editor.status_message = "File Saved".to_string(); 
                         },
                         ":q" => { 
