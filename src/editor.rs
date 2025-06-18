@@ -139,6 +139,19 @@ impl Editor {
             self.content[self.cursor_l].push_str(&current_line);
         }
     }
+
+    pub fn handle_delete(&mut self) {
+        if self.cursor_l >= self.content.len() {
+            return;
+        }
+
+        if self.cursor_c < self.content[self.cursor_l].len() {
+            self.content[self.cursor_l].remove(self.cursor_c);
+        } else if self.cursor_l < self.content.len() - 1 {
+            let next_line = self.content.remove(self.cursor_l + 1);
+            self.content[self.cursor_l].push_str(&next_line);
+        }
+    }
     
     pub fn handle_tab(&mut self) {
         if self.cursor_l < self.content.len() {

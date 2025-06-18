@@ -59,6 +59,7 @@ fn main() -> io::Result<()> {
                 },
                 (KeyCode::Enter, _) => editor.handle_enter(),
                 (KeyCode::Backspace, _) => editor.handle_backspace(),
+                (KeyCode::Delete, _) => editor.handle_delete(),
                 (KeyCode::Left, _) => editor.move_left(),
                 (KeyCode::Right, _) => editor.move_right(),
                 (KeyCode::Up, _) => editor.move_up(),
