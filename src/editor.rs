@@ -100,12 +100,10 @@ impl Editor {
             stdout,
             Print("ReEdit"),
             MoveTo(0, 1),
-            Print("--------------------------------------------------------------------------"),
+            Print("-------------------------------------------------------------------------"),
             MoveTo(sidebar_width, 3),
             Print(format!("|  < {file_name} >")),
             MoveTo(sidebar_width + 3 , 4),
-            Print(":w - Save | :q - Exit | i - Insert Mode"),
-            MoveTo(sidebar_width + 1, 5),
             Print("------------------------------------------")
         ).unwrap();
 
