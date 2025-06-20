@@ -116,6 +116,8 @@ impl Editor {
             ).unwrap();
         }
 
+        self.render_file_browser();
+        
         queue!(
             stdout,
             MoveTo(0, rows - 1),
@@ -124,8 +126,6 @@ impl Editor {
             Print(status),
             ResetColor
         ).unwrap();
-
-        self.render_file_browser();
 
         self.draw_cursor();
 
