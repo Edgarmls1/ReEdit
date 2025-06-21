@@ -231,6 +231,25 @@ impl Editor {
         }
     }
 
+    pub fn open_file_from_command(&mut self, path_str: &str) {
+        let mut path = std::path::PathBuf::from(path_str);
+
+        if path.is_relative() {
+            path = self.current_dir.join(path);
+        }
+
+        if path.exists() && path.is_file() {
+            self.content = read_file(path.to_str().unwrap());
+            self.file_path = path.to_str().unwrap().to_string();
+            self.cursor_l = 0;
+            self.cursor_c = 0;
+            self.scroll_offset = 0;
+            self.status_message = format!("Arquivo aberto: {}", self.file_path);
+            self.mode = Mode::Insert;
+        } else {
+            self.status_message = "File not find".to_string();
+        }
+    }
 
     pub fn insert_char(&mut self, c: char) {
         if self.cursor_l < self.content.len() {
