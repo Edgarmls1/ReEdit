@@ -157,6 +157,7 @@ impl Editor {
 
         for (i, file) in self.files.iter().enumerate() {
             let path = self.current_dir.join(file);
+            let display_name = truncate_string(file, sidebar_width.saturating_sub(3));
 
             queue!(
                 stdout,
@@ -167,9 +168,9 @@ impl Editor {
                     SetForegroundColor(style::Color::White)
                 },
                 if path.is_dir() {
-                    Print(format!("📁 {:width$}", file, width = sidebar_width as usize))
+                    Print(format!("📁 {display_name}")
                 } else {
-                    Print(format!("📄 {:width$}", file, width = sidebar_width as usize))
+                    Print(format!("📄 {display_name}")
                 },
                 ResetColor
             ).unwrap();
@@ -194,10 +195,7 @@ impl Editor {
     pub fn draw_cursor(&self) {
         let mut stdout = stdout();
         let sidebar_width = 30;
-        let cursor_char = match self.mode {
-            Mode::Insert => "", 
-            Mode::Command => "",
-        };
+        let cursor_char = "";
 
         let cursor_x = self.cursor_c as u16 + sidebar_width + 3;
         let cursor_y = (self.cursor_l - self.scroll_offset + 6) as u16;
@@ -206,7 +204,6 @@ impl Editor {
             stdout,
             MoveTo(cursor_x, cursor_y),
             Print(cursor_char),
-            ResetColor
         ).unwrap();
 
         stdout.flush().unwrap();
@@ -401,4 +398,15 @@ pub fn read_dir_files(path: &PathBuf) -> Vec<String> {
 
     entries.sort();
     entries
+}
+
+fn truncate_string(s: &str, max_width: usize) -> String {
+    if s.chars().count() <= max_width {
+        s.to_string()
+    } else if max_width > 1 {
+        let truncated: String = s.chars().take(max_width - 1).collect();
+        format!("{}…", truncated)
+    } else {
+        "…".to_string()
+    }
 }
