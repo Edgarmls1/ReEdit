@@ -64,16 +64,10 @@ fn main() -> io::Result<()> {
                     editor.command.push(c);
                 },
                 (KeyCode::Up, _) if matches!(editor.mode, editor::Mode::Command) => {
-                    if editor.file_cursor > 0 {
-                        editor.file_cursor -= 1;
-                        editor.adjust_sidebar_scroll();
-                    }
+                    editor.move_up_files();
                 },
                 (KeyCode::Down, _) if matches!(editor.mode, editor::Mode::Command) => {
-                    if editor.file_cursor + 1 < editor.files.len() {
-                        editor.file_cursor += 1;
-                        editor.adjust_sidebar_scroll();
-                    }
+                    editor.move_down_files();
                 },
                 (KeyCode::Right, _) if matches!(editor.mode, editor::Mode::Command) => {
                    editor.open_selected(); 

@@ -369,6 +369,20 @@ impl Editor {
         }
     }
 
+    pub fn move_up_files(&mut self) {
+        if self.file_cursor > 0 {
+            self.file_cursor -= 1;
+            self.adjust_sidebar_scroll();
+        }
+    }
+
+    pub fn move_down_files(&mut self) {
+        if self.file_cursor + 1 < self.files.len() {
+            self.file_cursor += 1;
+            self.adjust_sidebar_scroll();
+        }
+    }
+
     pub fn move_up(&mut self) {
         if self.cursor_l > 0 {
             self.cursor_l -= 1;
