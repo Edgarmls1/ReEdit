@@ -40,45 +40,21 @@ fn main() -> io::Result<()> {
                     editor.mode = editor::Mode::Insert;
                 },
                 (KeyCode::Enter, _) if matches!(editor.mode, editor::Mode::Command) => {
-                    let cmd = editor.command.trim();
-
-                    if cmd.starts_with(":e ") {
-                        let path = cmd[2..].trim();
-                        if path.is_empty() {
-                            editor.status_message = "Invalid Path".to_string();
-                        } else if Path::new(path).exists() {
-                            editor.content = read_file(path);
-                            editor.file_path = path.to_string();
-                            editor.cursor_l = 0;
-                            editor.cursor_c = 0;
-                            editor.status_message = format!("Opened File {path}");
-                            editor.mode = editor::Mode::Insert;
-                        } else {
-                            editor.content = vec![String::new()];
-                            editor.file_path = path.to_string();
-                            editor.cursor_l = 0;
-                            editor.cursor_c = 0;
-                            editor.status_message = format!("New File: {path}");
-                            editor.mode = editor::Mode::Insert;
-                        }
-                    } else { 
-                        match cmd {
-                            ":w" => { 
-                                editor.save()?; 
-                                editor.status_message = "File Saved".to_string(); 
-                            },
-                            ":q" => { 
-                                break; 
-                            },
-                            ":wq" => { 
-                                editor.save()?; 
-                                break; 
-                            },
-                            _ => {
-                                editor.status_message = "Unknow Command".to_string();
-                            }
-                        }
+                    if editor.command.starts_with(":e ") {
+                        let path_arg = editor.command[2..].trim();
+                        editor.open_file_from_command(path_arg);
+                    } else if editor.command == ":w" {
+                        editor.save()?;
+                        editor.status_message = "File Saved".to_string();
+                    } else if editor.command == ":q" {
+                        break;
+                    } else if editor.command == ":wq" {
+                        editor.save()?;
+                        break;
+                    } else {
+                        editor.status_message = "Unknow command".to_string();
                     }
+                
                     editor.command.clear();
                 },
                 (KeyCode::Backspace, _) if matches!(editor.mode, editor::Mode::Command) => {
