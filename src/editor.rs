@@ -26,7 +26,7 @@ pub struct Editor {
     pub file_cursor: usize,
 
     pub scroll_offset: usize,
-    pub scroll_sidebar: usize,
+    pub sidebar_scroll: usize,
 }
 
 impl Editor {
@@ -55,7 +55,7 @@ impl Editor {
             files,
             file_cursor: 0,
             scroll_offset: 0,
-            scroll_sidebar: 0,
+            sidebar_scroll: 0,
         }
     }
 
