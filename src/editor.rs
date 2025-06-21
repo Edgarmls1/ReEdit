@@ -157,7 +157,7 @@ impl Editor {
 
         for (i, file) in self.files.iter().enumerate() {
             let path = self.current_dir.join(file);
-            let display_name = truncate_string(file, sidebar_width.saturating_sub(3));
+            let display_name = truncate_string(file, sidebar_width.saturating_sub(3).into();
 
             queue!(
                 stdout,
