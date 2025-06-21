@@ -24,6 +24,8 @@ fn main() -> io::Result<()> {
 
     let mut editor = Editor::new(&file_path);
 
+    if file_path != "." { editor.mode = editor::Mode::Insert };
+
     terminal::enable_raw_mode()?;
 
     let _raw = terminal::enable_raw_mode();
