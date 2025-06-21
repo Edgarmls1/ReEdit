@@ -36,7 +36,7 @@ fn main() -> io::Result<()> {
                 (KeyCode::Esc, _) => {
                     editor.mode = editor::Mode::Command;
                 },
-                (KeyCode::Char('i'), _) if matches!(editor.mode, editor::Mode::Command) => {
+                (KeyCode::Char('i'), _) if matches!(editor.mode, editor::Mode::Command) && editor.command.is_empty() => {
                     editor.mode = editor::Mode::Insert;
                 },
                 (KeyCode::Enter, _) if matches!(editor.mode, editor::Mode::Command) => {
@@ -84,18 +84,19 @@ fn main() -> io::Result<()> {
                 (KeyCode::Backspace, _) if matches!(editor.mode, editor::Mode::Command) => {
                     editor.command.pop();
                 },
-                (KeyCode::Delete, _) => editor.handle_delete(),
                 (KeyCode::Char(c), _) if matches!(editor.mode, editor::Mode::Command) => {
                     editor.command.push(c);
                 },
                 (KeyCode::Up, _) if matches!(editor.mode, editor::Mode::Command) => {
                     if editor.file_cursor > 0 {
                         editor.file_cursor -= 1;
+                        editor.ajust_sidebar_scroll();
                     }
                 },
                 (KeyCode::Down, _) if matches!(editor.mode, editor::Mode::Command) => {
                     if editor.file_cursor + 1 < editor.files.len() {
                         editor.file_cursor += 1;
+                        editor.ajust_sidebar_scroll();
                     }
                 },
                 (KeyCode::Right, _) if matches!(editor.mode, editor::Mode::Command) => {
@@ -106,6 +107,7 @@ fn main() -> io::Result<()> {
                 },
                 (KeyCode::Enter, _) => editor.handle_enter(),
                 (KeyCode::Backspace, _) => editor.handle_backspace(),
+                (KeyCode::Delete, _) => editor.handle_delete(),
                 (KeyCode::Left, _) => editor.move_left(),
                 (KeyCode::Right, _) => editor.move_right(),
                 (KeyCode::Up, _) => editor.move_up(),
