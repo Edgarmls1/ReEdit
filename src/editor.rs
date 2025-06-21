@@ -26,6 +26,7 @@ pub struct Editor {
     pub file_cursor: usize,
 
     pub scroll_offset: usize,
+    pub scroll_sidebar: usize,
 }
 
 impl Editor {
@@ -54,6 +55,7 @@ impl Editor {
             files,
             file_cursor: 0,
             scroll_offset: 0,
+            scroll_sidebar: 0,
         }
     }
 
@@ -100,7 +102,7 @@ impl Editor {
             stdout,
             Print("ReEdit"),
             MoveTo(0, 1),
-            Print("-------------------------------------------------------------------------"),
+            Print("---------------------------------------------------------------------------"),
             MoveTo(sidebar_width, 3),
             Print(format!("|  < {file_name} >")),
             MoveTo(sidebar_width + 3 , 4),
@@ -220,6 +222,18 @@ impl Editor {
             self.scroll_offset = self.cursor_l - available_rows + 1;
         }
     }
+
+    pub fn adjust_sidebar_scroll(&mut self) {
+        let (_, rows) = terminal::size().unwrap();
+        let visible_files = (rows - 6) as usize;
+    
+        if self.file_cursor < self.sidebar_scroll {
+            self.sidebar_scroll = self.file_cursor;
+        } else if self.file_cursor >= self.sidebar_scroll + visible_files {
+            self.sidebar_scroll = self.file_cursor - visible_files + 1;
+        }
+    }
+
 
     pub fn insert_char(&mut self, c: char) {
         if self.cursor_l < self.content.len() {
