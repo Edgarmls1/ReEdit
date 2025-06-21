@@ -90,13 +90,13 @@ fn main() -> io::Result<()> {
                 (KeyCode::Up, _) if matches!(editor.mode, editor::Mode::Command) => {
                     if editor.file_cursor > 0 {
                         editor.file_cursor -= 1;
-                        editor.ajust_sidebar_scroll();
+                        editor.adjust_sidebar_scroll();
                     }
                 },
                 (KeyCode::Down, _) if matches!(editor.mode, editor::Mode::Command) => {
                     if editor.file_cursor + 1 < editor.files.len() {
                         editor.file_cursor += 1;
-                        editor.ajust_sidebar_scroll();
+                        editor.adjust_sidebar_scroll();
                     }
                 },
                 (KeyCode::Right, _) if matches!(editor.mode, editor::Mode::Command) => {
