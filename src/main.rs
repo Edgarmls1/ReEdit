@@ -42,7 +42,7 @@ fn main() -> io::Result<()> {
                 (KeyCode::Enter, _) if matches!(editor.mode, editor::Mode::Command) => {
                     if editor.command.starts_with(":e ") {
                         let path_arg = editor.command[2..].trim();
-                        editor.open_file_from_command(path_arg);
+                        editor.open_file_from_command(&path_arg);
                     } else if editor.command == ":w" {
                         editor.save()?;
                         editor.status_message = "File Saved".to_string();

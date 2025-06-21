@@ -148,8 +148,6 @@ impl Editor {
 
         let sidebar_width = 30;
 
-        let (_cols, rows) = terminal::size().unwrap();
-
         queue!(
             stdout,
             MoveTo(self.cursor_c as u16 + sidebar_width + 3, (self.cursor_l - self.scroll_offset + 5) as u16)
@@ -182,7 +180,6 @@ impl Editor {
             Print(format!("📁 {}", self.current_dir.display()))
         ).unwrap();
 
-        let (cols, _) = terminal::size().unwrap();
         for y in 0..self.files.len() as u16 {
             queue!(
                 stdout,
