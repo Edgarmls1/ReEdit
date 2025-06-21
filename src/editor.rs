@@ -119,6 +119,15 @@ impl Editor {
         }
 
         self.render_file_browser();
+
+        if matches!(self.mode, Mode::Command) {
+            queue!(
+                stdout,
+                MoveTo(0, rows - 2),
+                Clear(ClearType::CurrentLine),
+                Print(format!("{}", self.command.to_string()))
+            ).unwrap();
+        }
         
         queue!(
             stdout,
@@ -140,15 +149,6 @@ impl Editor {
         let sidebar_width = 30;
 
         let (_cols, rows) = terminal::size().unwrap();
-
-        if matches!(self.mode, Mode::Command) {
-            queue!(
-                stdout,
-                MoveTo(0, rows - 2),
-                Clear(ClearType::CurrentLine),
-                Print(format!("{}", self.command.to_string()))
-            ).unwrap();
-        }
 
         queue!(
             stdout,
@@ -183,7 +183,7 @@ impl Editor {
         ).unwrap();
 
         let (cols, _) = terminal::size().unwrap();
-        for y in 0..self.files.len().min(20) as u16 {
+        for y in 0..self.files.len() as u16 {
             queue!(
                 stdout,
                 MoveTo(sidebar_width as u16, y + 4),
