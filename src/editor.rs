@@ -168,9 +168,9 @@ impl Editor {
                     SetForegroundColor(style::Color::White)
                 },
                 if path.is_dir() {
-                    Print(format!("📁 {display_name}")
+                    Print(format!("📁 {}", display_name)
                 } else {
-                    Print(format!("📄 {display_name}")
+                    Print(format!("📄 {}", display_name)
                 },
                 ResetColor
             ).unwrap();
