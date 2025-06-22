@@ -81,7 +81,13 @@ impl Editor {
         let file_name = if self.file_path == "." {
             String::from("Empty File")
         } else {
-            self.file_path.clone()
+            relative_path(&self.current_dir, &self.file_path)
+        };
+
+        let icon = if self.file_path == "." {
+            "📄"
+        } else {
+            file_icon(&self.file_path)
         };
 
         let status = format!("{} | {} | ln {} | col {} | {}", 
@@ -104,7 +110,7 @@ impl Editor {
             MoveTo(0, 1),
             Print("---------------------------------------------------------------------------"),
             MoveTo(sidebar_width, 3),
-            Print(format!("|  < {file_name} >")),
+            Print(format!("|  < {icon} {file_name} >")),
             MoveTo(sidebar_width + 3 , 4),
             Print("------------------------------------------")
         ).unwrap();
@@ -156,6 +162,11 @@ impl Editor {
         for (i, file) in self.files.iter().enumerate() {
             let path = self.current_dir.join(file);
             let display_name = truncate_string(file, sidebar_width.saturating_sub(3).into());
+            let icon = if path.is_dir() {
+                folder_icon(file)
+            } else {
+                file_icon(file)
+            };
 
             queue!(
                 stdout,
@@ -165,11 +176,7 @@ impl Editor {
                 } else {
                     SetForegroundColor(style::Color::White)
                 },
-                if path.is_dir() {
-                    Print(format!("📁 {}", display_name))
-                } else {
-                    Print(format!("📄 {}", display_name))
-                },
+                Print(format!("{icon} {display_name}")),
                 ResetColor
             ).unwrap();
         }
@@ -306,6 +313,7 @@ impl Editor {
             '[' => ']',
             '"' => '"',
             '\'' => '\'',
+            '<' => '>',
             _ => { return; }
         };
 
@@ -438,5 +446,75 @@ fn truncate_string(s: &str, max_width: usize) -> String {
         format!("{}…", truncated)
     } else {
         "…".to_string()
+    }
+}
+
+fn file_icon(file_name: &str) -> &str {
+    if file_name.ends_with(".rs") {
+        "🦀"
+    } else if file_name.ends_with(".go") {
+        "🐹"
+    } else if file_name.ends_with(".c") {
+        "C"
+    } else if file_name.ends_with(".cpp") {
+        "C++"
+    } else if file_name.ends_with(".h") {
+        "📄"
+    } else if file_name.ends_with(".py") {
+        "🐍"
+    } else if file_name.ends_with(".r") {
+        "𝐑"
+    } else if file_name.ends_with(".js") {
+        "JS"
+    } else if file_name.ends_with(".ts") {
+        "🔷"
+    } else if file_name.ends_with(".html") {
+        "🌐"
+    } else if file_name.ends_with(".css") {
+        "🎨"
+    } else if file_name.ends_with(".md") {
+        "📄"
+    } else if file_name.ends_with(".json") {
+        "\{\}"
+    } else if file_name.ends_with(".toml") || file_name.ends_with(".yaml") || file_name.ends_with(".conf") || file_name.ends_with(".config") {
+        "⚙️"
+    } else if file_name.ends_with(".sh") {
+        "🐧"
+    } else if file_name.ends_with(".txt") {
+        "📄"
+    } else if file_name.ends_with(".sql") {
+        "🛢"
+    } else if file_name.ends_with(".java") {
+        "☕"
+    } else {
+        "📄"
+    }
+}
+
+fn folder_icon(folder_name: &str) -> &str {
+    match folder_name {
+        "Downloads" => "📥",
+        "Desktop" => "🖥️",
+        "Documents" || "Documentos" => "📄",
+        "Dev" || "dev" => "</>",
+        "Projects" || "projects" => "🗂️",
+        "Pictures" || "Imagens" => "🖼️",
+        "Music" || "Música" => "🎵",
+        "Videos" || "Vídeos" => "🎥",
+        ".config" => "⚙️",
+        ".git" => "🗃️",
+        "node_modules" => "📦",
+        "target" => "🛠️",
+        _ => "📁",
+    }
+}
+
+fn relative_path(base: &PathBuf, target: &str) -> String {
+    let target_path = Path::new(target);
+
+    if let Ok(relative) = target_path.strip_prefix(base) {
+        relative.display().to_string()
+    } else {
+        target_path.display().to_string()
     }
 }
