@@ -50,9 +50,6 @@ fn main() -> io::Result<()> {
                         file_path = path_arg;
                         editor.save()?;
                         editor.status_message = "File Saved".to_string();
-                    } else if editor.command == ":w" {
-                        editor.save()?;
-                        editor.status_message = "File Saved".to_string();
                     } else if editor.command == ":q" {
                         break;
                     } else if editor.command == ":wq" {
