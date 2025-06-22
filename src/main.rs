@@ -11,7 +11,7 @@ use editor::Editor;
 fn main() -> io::Result<()> {
     let args: Vec<String> = env::args().collect();
     
-    let mut file_path = if args.len() < 2 {
+    let file_path = if args.len() < 2 {
         ".".to_string()
     }else {
         args[1].clone()
@@ -45,9 +45,7 @@ fn main() -> io::Result<()> {
                     if editor.command.starts_with(":e ") {
                         let path_arg = editor.command[2..].trim().to_string();
                         editor.open_file_from_command(&path_arg);
-                    } else if editor.command.starts_with(":w ") {
-                        let path_arg = editor.command[2..].trim().to_string();
-                        file_path = path_arg;
+                    } else if editor.command == ":w" {
                         editor.save()?;
                         editor.status_message = "File Saved".to_string();
                     } else if editor.command == ":q" {
