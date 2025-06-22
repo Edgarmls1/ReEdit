@@ -67,7 +67,7 @@ impl Editor {
         let (cols, rows) = terminal::size().unwrap();
 
         let cabecalho1 = "-".repeat(cols.into());
-        let cabecalho2 = "-".repeat((cols - sidebar_width + 3).into());
+        let cabecalho2 = "-".repeat((cols - sidebar_width).into());
         
         let available_rows = (rows - 8) as usize;
 
@@ -245,17 +245,19 @@ impl Editor {
             path = self.current_dir.join(path);
         }
 
-        if path.exists() && path.is_file() {
+        if path.is_file() {
             self.content = read_file(path.to_str().unwrap());
-            self.file_path = path.to_str().unwrap().to_string();
-            self.cursor_l = 0;
-            self.cursor_c = 0;
-            self.scroll_offset = 0;
-            self.status_message = format!("Arquivo aberto: {}", self.file_path);
-            self.mode = Mode::Insert;
+            self.status_message = format!("Opened File: {}", path.display());
         } else {
-            self.status_message = "File not find".to_string();
+            self.content = vec![String::new()];
+            self.status_message = format!("New File: {}", path.display());
         }
+
+        self.file_path = path.to_str().unwrap().to_string();
+        self.cursor_l = 0;
+        self.cursor_c = 0;
+        self.scroll_offset = 0;
+        self.mode = Mode::Insert;
     }
 
     pub fn insert_char(&mut self, c: char) {
