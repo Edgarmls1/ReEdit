@@ -11,7 +11,7 @@ use editor::Editor;
 fn main() -> io::Result<()> {
     let args: Vec<String> = env::args().collect();
     
-    let file_path = if args.len() < 2 {
+    let mut file_path = if args.len() < 2 {
         ".".to_string()
     }else {
         args[1].clone()
