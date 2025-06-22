@@ -66,8 +66,8 @@ impl Editor {
 
         let (cols, rows) = terminal::size().unwrap();
 
-        let cabecalho1 = "-".repeat(cols);
-        let cabecalho2 = "-".repeat((cols - sidebar_width + 3).into();
+        let cabecalho1 = "-".repeat(cols.into());
+        let cabecalho2 = "-".repeat((cols - sidebar_width + 3).into());
         
         let available_rows = (rows - 8) as usize;
 
