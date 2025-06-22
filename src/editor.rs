@@ -111,11 +111,11 @@ impl Editor {
             stdout,
             Print("ReEdit"),
             MoveTo(0, 1),
-            Print("---------------------------------------------------------------------------"),
+            Print("{cabecalho1}"),
             MoveTo(sidebar_width, 3),
             Print(format!("|  < {icon} {file_name} >")),
             MoveTo(sidebar_width + 3 , 4),
-            Print("------------------------------------------")
+            Print("{cabecalho2}")
         ).unwrap();
 
         for (i, line) in self.content.iter().enumerate().skip(self.scroll_offset).take(available_rows) {
