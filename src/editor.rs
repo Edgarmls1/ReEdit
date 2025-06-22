@@ -64,8 +64,11 @@ impl Editor {
 
         let sidebar_width = 30;
 
-        let (_cols, rows) = terminal::size().unwrap();
+        let (cols, rows) = terminal::size().unwrap();
 
+        let cabecalho1 = "-".repeat(cols);
+        let cabecalho2 = "-".reapeat(cols - sidebar_width + 3);
+        
         let available_rows = (rows - 8) as usize;
 
         let mode_label = match self.mode {
