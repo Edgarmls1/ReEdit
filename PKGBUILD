@@ -1,6 +1,6 @@
 # Maintainer: edgar1macedosalazar@gmail.com
 pkgname=reedit
-pkgver=1.0
+pkgver=1.7
 pkgrel=1
 pkgdesc="a terminal text editor written in rust"
 arch=('x86_64')
