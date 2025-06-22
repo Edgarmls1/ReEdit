@@ -45,8 +45,10 @@ fn main() -> io::Result<()> {
                     if editor.command.starts_with(":e ") {
                         let path_arg = editor.command[2..].trim().to_string();
                         editor.open_file_from_command(&path_arg);
+                        editor.refresh_sidebar();
                     } else if editor.command == ":w" {
                         editor.save()?;
+                        editor.refresh_sidebar();
                         editor.status_message = "File Saved".to_string();
                     } else if editor.command == ":q" {
                         break;
