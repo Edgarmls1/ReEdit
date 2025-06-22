@@ -460,9 +460,9 @@ fn truncate_string(s: &str, max_width: usize) -> String {
 
 fn file_icon(file_name: &str) -> &str {
     if file_name.ends_with(".rs") {
-        " "
+        ""
     } else if file_name.ends_with(".go") {
-        " "
+        ""
     } else if file_name.ends_with(".c") {
         "C"
     } else if file_name.ends_with(".cpp") {
@@ -470,7 +470,7 @@ fn file_icon(file_name: &str) -> &str {
     } else if file_name.ends_with(".h") {
         "H"
     } else if file_name.ends_with(".py") {
-        " "
+        ""
     } else if file_name.ends_with(".r") {
         "𝐑"
     } else if file_name.ends_with(".js") {
@@ -482,7 +482,7 @@ fn file_icon(file_name: &str) -> &str {
     } else if file_name.ends_with(".css") {
         "🎨"
     } else if file_name.ends_with(".md") {
-        " "
+        ""
     } else if file_name.ends_with(".json") {
         "{}"
     } else if file_name.ends_with(".toml") || file_name.ends_with(".yaml") || file_name.ends_with(".conf") || file_name.ends_with(".config") {
@@ -490,9 +490,9 @@ fn file_icon(file_name: &str) -> &str {
     } else if file_name.ends_with(".sh") {
         ">_"
     } else if file_name.ends_with(".txt") {
-        " "
+        ""
     } else if file_name.ends_with(".sql") {
-        " "
+        ""
     } else if file_name.ends_with(".java") {
         "☕"
     } else {

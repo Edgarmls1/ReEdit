@@ -69,9 +69,11 @@ fn main() -> io::Result<()> {
                 },
                 (KeyCode::Up, _) if matches!(editor.mode, editor::Mode::Command) => {
                     editor.move_up_files();
+                    editor.adjust_sidebar_scroll();
                 },
                 (KeyCode::Down, _) if matches!(editor.mode, editor::Mode::Command) => {
                     editor.move_down_files();
+                    editor.adjust_sidebar_scroll();
                 },
                 (KeyCode::Right, _) if matches!(editor.mode, editor::Mode::Command) => {
                    editor.open_selected(); 
