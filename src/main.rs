@@ -28,8 +28,6 @@ fn main() -> io::Result<()> {
 
     terminal::enable_raw_mode()?;
 
-    let _raw = terminal::enable_raw_mode();
-
     loop {
         editor.render();
         editor.draw_cursor();
