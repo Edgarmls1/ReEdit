@@ -2,10 +2,8 @@ mod editor;
 
 use std::env;
 use std::io;
-use std::path::Path;
-use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{self, Event, KeyCode, KeyEvent};
 use crossterm::terminal;
-use editor::read_file;
 use editor::Editor;
 
 fn main() -> io::Result<()> {
