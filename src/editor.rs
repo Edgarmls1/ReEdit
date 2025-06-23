@@ -210,7 +210,7 @@ impl Editor {
     pub fn draw_cursor(&self) {
         let mut stdout = stdout();
         let sidebar_width = 30;
-        let cursor_char = "|";
+        let cursor_char = "";
 
         let cursor_x = self.cursor_c as u16 + sidebar_width + 6;
         let cursor_y = (self.cursor_l - self.scroll_offset + 6) as u16;

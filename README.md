@@ -39,7 +39,7 @@ winget install -e --id Git.Git
 git clone https://github.com/Edgarmls1/ReEdit.git
 cd ReEdit
 cargo build --release
-Copy-Item target\release\reedit.exe C:\Users\<your_user>\.cargo\bin\
+cargo install --path .
 ```
 
 ## Usage
