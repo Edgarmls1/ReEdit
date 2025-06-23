@@ -38,3 +38,11 @@ Copy-Item target\release\reedit.exe C:\Users\<your_user>\.cargo\bin\
 ```bash
 reedit -h or reedit --help
 ```
+
+## Features
+
+- [x] insert and command mode
+- [x] file browser (sidebar)
+- [x] line numbers
+- [ ] customization
+- [ ] LSP
