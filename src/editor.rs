@@ -67,7 +67,7 @@ impl Editor {
         let (cols, rows) = terminal::size().unwrap();
 
         let cabecalho1 = "-".repeat(cols.into());
-        let cabecalho2 = "-".repeat((cols - sidebar_width).into());
+        let cabecalho2 = "-".repeat((cols - sidebar_width - 3).into());
         
         let available_rows = (rows - 8) as usize;
 
@@ -123,7 +123,15 @@ impl Editor {
                 stdout,
                 MoveTo(sidebar_width + 3, (i - self.scroll_offset + 6) as u16),
                 Clear(ClearType::CurrentLine),
-                Print(line)
+                if i < 10 {
+                    Print(format!("   {i}| {line}"))
+                } else if i < 100 {
+                    Print(format!("  {i}| {line}"))
+                } else if i < 1000 {
+                    Print(format!(" {i}| {line}"))
+                } else {
+                    Print(format!("{i}| {line}"))
+                },
             ).unwrap();
         }
 
