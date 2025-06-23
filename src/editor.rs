@@ -67,7 +67,7 @@ impl Editor {
         let (cols, rows) = terminal::size().unwrap();
 
         let cabecalho1 = "-".repeat(cols.into());
-        let cabecalho2 = "-".repeat((cols - sidebar_width - 3).into());
+        let cabecalho2 = "-".repeat((cols - sidebar_width).into());
         
         let available_rows = (rows - 8) as usize;
 
@@ -114,14 +114,14 @@ impl Editor {
             Print(format!("{cabecalho1}")),
             MoveTo(sidebar_width, 3),
             Print(format!("|  < {icon} {file_name} >")),
-            MoveTo(sidebar_width + 3 , 4),
+            MoveTo(sidebar_width, 4),
             Print(format!("{cabecalho2}"))
         ).unwrap();
 
         for (i, line) in self.content.iter().enumerate().skip(self.scroll_offset).take(available_rows) {
             queue!(
                 stdout,
-                MoveTo(sidebar_width + 3, (i - self.scroll_offset + 6) as u16),
+                MoveTo(sidebar_width, (i - self.scroll_offset + 6) as u16),
                 Clear(ClearType::CurrentLine),
                 if i < 10 {
                     Print(format!("   {i}| {line}"))
@@ -210,9 +210,9 @@ impl Editor {
     pub fn draw_cursor(&self) {
         let mut stdout = stdout();
         let sidebar_width = 30;
-        let cursor_char = "";
+        let cursor_char = "|";
 
-        let cursor_x = self.cursor_c as u16 + sidebar_width + 7;
+        let cursor_x = self.cursor_c as u16 + sidebar_width + 6;
         let cursor_y = (self.cursor_l - self.scroll_offset + 6) as u16;
 
         queue!(
