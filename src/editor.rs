@@ -109,7 +109,7 @@ impl Editor {
 
         queue!(
             stdout,
-            Print("ReEdit"),
+            Print("ReEdit - Terminal Text Editor"),
             MoveTo(0, 1),
             Print(format!("{cabecalho1}")),
             MoveTo(sidebar_width, 3),
@@ -212,7 +212,7 @@ impl Editor {
         let sidebar_width = 30;
         let cursor_char = "";
 
-        let cursor_x = self.cursor_c as u16 + sidebar_width + 3;
+        let cursor_x = self.cursor_c as u16 + sidebar_width + 7;
         let cursor_y = (self.cursor_l - self.scroll_offset + 6) as u16;
 
         queue!(
