@@ -4,6 +4,7 @@ A simple terminal based vim/neovim like text editor
 
 ## Dependencies
 - rust
+- nerd font (optional)
 
 ## Instalation
 
