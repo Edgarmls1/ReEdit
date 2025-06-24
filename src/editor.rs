@@ -287,16 +287,22 @@ impl Editor {
         self.cursor_c = 0;
 
         let line = &mut self.content[self.cursor_l];
+        
         let prev_char = if self.cursor_c > 0 {
             line.chars().nth(self.cursor_c - 1)
         } else {
             None
         };
-        let tab = self.handle_tab();
+
+        let indent_line = if self.cursor_l < self.content.len() {
+            self.content[self.cursor_l].split_off(self.cursor_c + 4)
+        } else {
+            String::new()
+        };
 
         match prev_char {
             Some('(') | Some('{') | Some('[') => {
-                self.content.insert(self.cursor_l + 1, tab);
+                self.content.insert(self.cursor_l + 1, indent_line);
                 self.content.insert(self.cursor_l + 1, new_line);
             },
             _ => (),
