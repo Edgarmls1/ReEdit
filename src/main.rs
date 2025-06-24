@@ -44,7 +44,7 @@ fn main() -> io::Result<()> {
                         editor.refresh_sidebar();
                     } else if editor.command.starts_with(":w ") {
                         let path_arg = editor.command[2..].trim().to_string();
-                        editor.save_as(&path_arg);
+                        editor.save_as(&path_arg)?;
                         editor.refresh_sidebar();
                     } else if editor.command == ":w" {
                         editor.save()?;

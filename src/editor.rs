@@ -276,37 +276,43 @@ impl Editor {
     }
 
     pub fn handle_enter(&mut self) {
-        let new_line = if self.cursor_l < self.content.len() {
-            self.content[self.cursor_l].split_off(self.cursor_c)
-        } else {
-            String::new()
-        };
+        if self.cursor_l >= self.content.len() {
+            return;
+        }
 
-        self.content.insert(self.cursor_l + 1, new_line.clone());
-        let line = &mut self.content[self.cursor_l];
-        self.cursor_l +=1;
-        self.cursor_c = 0;
+        let current_line = &mut self.content[self.cursor_l];
 
+        let current_indent = current_line
+            .chars()
+            .take_while(|c| c.is_whitespace())
+            .collect::<String>();
+
+        let indent_unit = "    ";
+        let current_char = current_line.chars().nth(self.cursor_c);
         let prev_char = if self.cursor_c > 0 {
-            line.chars().nth(self.cursor_c - 1)
+            current_line.chars().nth(self.cursor_c - 1)
         } else {
             None
         };
 
-        let indent_line = if self.cursor_l < self.content.len() {
-            self.content[self.cursor_l].split_off(self.cursor_c + 4)
-        } else {
-            String::new()
-        };
+        let suffix = current_line.split_off(self.cursor_c);
+        self.cursor_l += 1;
 
-        match prev_char {
-            Some('(') | Some('{') | Some('[') => {
-                self.content.insert(self.cursor_l + 1, indent_line);
-                self.content.insert(self.cursor_l + 1, new_line);
-            },
-            _ => (),
+        if matches!(
+            (prev_char, current_char),
+            (Some('{'), Some('}')) |
+            (Some('['), Some(']')) |
+            (Some('('), Some(')'))
+        ) {
+            self.content.insert(self.cursor_l, format!("{}{}", current_indent, indent_unit));
+            self.content.insert(self.cursor_l + 1, format!("{}{}", current_indent, suffix));
+            self.cursor_c = (current_indent.len() + indent_unit.len());
+        } else {
+            self.content.insert(self.cursor_l, format!("{}{}", current_indent, suffix));
+            self.cursor_c = current_indent.len();
         }
     }
+
 
     pub fn handle_backspace(&mut self) {
         if self.cursor_c > 0 {
