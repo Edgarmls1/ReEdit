@@ -298,7 +298,7 @@ impl Editor {
                 self.content.insert(self.cursor_l + 1, "    ".to_string());
                 self.content.insert(self.cursor_l + 1, new_line);
             },
-            _ => None,
+            _ => (),
         }
     }
 
