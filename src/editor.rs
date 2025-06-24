@@ -296,7 +296,7 @@ impl Editor {
 
         match prev_char {
             Some('(') | Some('{') | Some('[') => {
-                self.content.insert(self.cursor_l + 1, tab.to_string());
+                self.content.insert(self.cursor_l + 1, tab);
                 self.content.insert(self.cursor_l + 1, new_line);
             },
             _ => (),
