@@ -285,6 +285,13 @@ impl Editor {
         self.content.insert(self.cursor_l + 1, new_line);
         self.cursor_l +=1;
         self.cursor_c = 0;
+
+        let prev_char = self.cursor_c - 1;
+
+        if prev_char == '(' || prev_char == '{' || prev_char == '[' {
+            self.content.insert(self.cursor_l + 1, "    ");
+            self.content.insert(self.cursor_l + 1, new_line);
+        }
     }
 
     pub fn handle_backspace(&mut self) {
