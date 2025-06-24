@@ -282,12 +282,12 @@ impl Editor {
             String::new()
         };
 
+        let line = &mut self.content[self.cursor_l];
+
         self.content.insert(self.cursor_l + 1, new_line.clone());
         self.cursor_l +=1;
         self.cursor_c = 0;
 
-        let line = &mut self.content[self.cursor_l];
-        
         let prev_char = if self.cursor_c > 0 {
             line.chars().nth(self.cursor_c - 1)
         } else {
