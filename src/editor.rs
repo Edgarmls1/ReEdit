@@ -286,7 +286,12 @@ impl Editor {
         self.cursor_l +=1;
         self.cursor_c = 0;
 
-        let prev_char = self.cursor_c - 1;
+        let line = &mut self.content[self.cursor_l];
+        let prev_char = if self.cursor_c > 0 {
+            line.chars().nth(self.cursor_c - 1)
+        } else {
+            None
+        };
 
         if prev_char == '(' || prev_char == '{' || prev_char == '[' {
             self.content.insert(self.cursor_l + 1, "    ".to_string());
