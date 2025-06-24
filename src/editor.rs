@@ -282,9 +282,8 @@ impl Editor {
             String::new()
         };
 
-        let line = &mut self.content[self.cursor_l];
-
         self.content.insert(self.cursor_l + 1, new_line.clone());
+        let line = &mut self.content[self.cursor_l];
         self.cursor_l +=1;
         self.cursor_c = 0;
 
