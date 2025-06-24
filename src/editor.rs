@@ -292,10 +292,11 @@ impl Editor {
         } else {
             None
         };
+        let tab = self.handle_tab();
 
         match prev_char {
             Some('(') | Some('{') | Some('[') => {
-                self.content.insert(self.cursor_l + 1, "    ".to_string());
+                self.content.insert(self.cursor_l + 1, tab.to_string());
                 self.content.insert(self.cursor_l + 1, new_line);
             },
             _ => (),
@@ -448,6 +449,20 @@ impl Editor {
         let mut file = File::create(&self.file_path)?;
         file.write_all(self.content.join("\n").as_bytes())?;
         self.status_message = "File Saved".to_string();
+        Ok(())
+    }
+
+    pub fn save_as(&mut self, new_path: &str) -> io::Result<()> {
+        let mut path = PathBuf::from(new_path);
+        if path.is_relative() {
+            path = self.current_dir.join(path);
+        }
+
+        let mut file = File::create(&path)?;
+        file.write_all(self.content.join("\n").as_bytes())?;
+
+        self.file_path = path.to_str().unwrap().to_string();
+        self.status_message = format!("Arquivo salvo como: {}", self.file_path);
         Ok(())
     }
 }
