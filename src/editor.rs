@@ -123,14 +123,14 @@ impl Editor {
                 stdout,
                 MoveTo(sidebar_width, (i - self.scroll_offset + 6) as u16),
                 Clear(ClearType::CurrentLine),
-                if i < 10 {
-                    Print(format!("   {i}| {line}"))
-                } else if i < 100 {
-                    Print(format!("  {i}| {line}"))
-                } else if i < 1000 {
-                    Print(format!(" {i}| {line}"))
+                if i < 9 {
+                    Print(format!("   {}| {}", i + 1, line))
+                } else if i < 99 {
+                    Print(format!("  {}| {}", i + 1, line))
+                } else if i < 999 {
+                    Print(format!(" {}| {}", i + 1, line))
                 } else {
-                    Print(format!("{i}| {line}"))
+                    Print(format!("{}| {}", i + 1, line))
                 },
             ).unwrap();
         }
