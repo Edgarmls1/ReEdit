@@ -7,9 +7,12 @@ use crossterm::style::{Print, ResetColor, SetForegroundColor};
 use crossterm::*;
 use crossterm::terminal::{self, Clear, ClearType};
 
+const SIDEBAR: f32 = 0.2;
+
 pub enum Mode {
     Insert,
     Command,
+    Visual,
 }
 
 pub struct Editor {
@@ -27,6 +30,9 @@ pub struct Editor {
 
     pub scroll_offset: usize,
     pub sidebar_scroll: usize,
+
+    pub clipboard: Option<String>,
+    pub visual_start: Option<usize>,
 }
 
 impl Editor {
@@ -56,29 +62,33 @@ impl Editor {
             file_cursor: 0,
             scroll_offset: 0,
             sidebar_scroll: 0,
+            clipboard: None,
+            visual_start: None,
         }
     }
 
     pub fn render(&mut self) {
         let mut stdout = stdout();
 
-        let sidebar_width = 30;
-
         let (cols, rows) = terminal::size().unwrap();
 
+        let sidebar_width = (SIDEBAR * cols as f32).floor() as u16;
+
         let cabecalho1 = "-".repeat(cols.into());
-        let cabecalho2 = "-".repeat((cols - sidebar_width - 3).into());
+        let cabecalho2 = "-".repeat((cols - sidebar_width).into());
         
         let available_rows = (rows - 8) as usize;
 
         let mode_label = match self.mode {
             Mode::Insert => "-- INSERT --",
             Mode::Command => "-- COMMAND --",
+            Mode::Visual => "-- VISUAL --",
         };
 
         let status_color = match self.mode {
             Mode::Command => style::Color::Red,
             Mode::Insert => style::Color::Green,
+            Mode::Visual => style::Color::Purple,
         };
 
         let file_name = if self.file_path == "." {
@@ -91,6 +101,17 @@ impl Editor {
             "📄"
         } else {
             file_icon(&self.file_path)
+        };
+
+        let (start, end) = match self.visual_start {
+            Some(start) if self.mode == Mode::Visual => {
+                if start <= self.cursor_l {
+                    (start, self.cursor_l)
+                } else {
+                    (self.cursor_l, start)
+                }
+            },
+            _ => (0, 0),
         };
 
         let status = format!("{} | {} | ln {} | col {} | {}", 
@@ -119,10 +140,18 @@ impl Editor {
         ).unwrap();
 
         for (i, line) in self.content.iter().enumerate().skip(self.scroll_offset).take(available_rows) {
+            let y = (i - self.scroll_offset + 6) as u16;
+            let is_selected = i >= start && i <= end;
+
             queue!(
                 stdout,
-                MoveTo(sidebar_width, (i - self.scroll_offset + 6) as u16),
+                MoveTo(sidebar_width, y),
                 Clear(ClearType::CurrentLine),
+                if is_selected {
+                    SetBackgroundColor(Color::DarkGrey)
+                } else {
+                    ResetColor
+                },
                 if i < 9 {
                     Print(format!("   {}| {}", i + 1, line))
                 } else if i < 99 {
@@ -132,6 +161,7 @@ impl Editor {
                 } else {
                     Print(format!("{}| {}", i + 1, line))
                 },
+                ResetColor
             ).unwrap();
         }
 
@@ -163,7 +193,9 @@ impl Editor {
     pub fn render_file_browser(&mut self) {
         let mut stdout = stdout();
 
-        let sidebar_width = 30;
+        let (cols, rows) = terminal::size().unwrap();
+
+        let sidebar_width = (SIDEBAR * cols as f32).floor() as u16;
 
         queue!(
             stdout,
@@ -201,7 +233,7 @@ impl Editor {
         for y in 0..self.files.len() as u16 {
             queue!(
                 stdout,
-                MoveTo(sidebar_width as u16, y + 4),
+                MoveTo(sidebar_width, y + 4),
                 Print("|")
             ).unwrap();
         }
@@ -209,7 +241,10 @@ impl Editor {
 
     pub fn draw_cursor(&self) {
         let mut stdout = stdout();
-        let sidebar_width = 30;
+        let (cols, rows) = terminal::size().unwrap();
+
+        let sidebar_width = (SIDEBAR * cols as f32).floor() as u16;
+
         let cursor_char = "";
 
         let cursor_x = self.cursor_c as u16 + sidebar_width + 6;
@@ -361,6 +396,29 @@ impl Editor {
             self.cursor_c += 1;
 
             self.content[self.cursor_l].insert(self.cursor_c, close);
+        }
+    }
+
+    pub fn copy_selection(&mut self) {
+        if let Some(start) = self.visual_start {
+            let (start, end) = if start <= self.cursor_l {
+                (start, self.cursor_l)
+            } else {
+                (self.cursor_l, start)
+            };
+            let lines = self.content[start..=end].join("\n");
+            self.clipboard = Some(lines);
+            self.status_message = "copied".to_string();
+            self.mode = Mode::Command;
+            self.visual_start = None;
+        }
+    }
+
+    pub fn paste_lines(&mut self) {
+        if let Some(ref lines) = self.clipboard {
+            let split: Vec<String> = lines.lines().map(String::from).collect();
+            self.content.splice(self.cursor_l + 1..self.cursor_l + 1, split);
+            self.status_message = "pasted".to_string();
         }
     }
 

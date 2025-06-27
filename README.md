@@ -11,7 +11,9 @@ A simple terminal based vim/neovim like text editor
 ### Arch Based Distros
 
 ``` bash
-sudo pacman -S rust git
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+sudo pacman -S git
 
 git clone https://github.com/Edgarmls1/ReEdit.git
 cd ReEdit
@@ -21,9 +23,11 @@ makepkg -si
 ### Other Linux Distros and Mac
 
 ```bash
-sudo apt install rust git # for debian based
-sudo dnf install rust git # for redhat based
-brew install rust git # for macos
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+sudo apt install git # for debian based
+sudo dnf install git # for redhat based
+brew install git # for macos
 
 git clone https://github.com/Edgarmls1/ReEdit.git
 cd ReEdit
@@ -34,7 +38,6 @@ sudo cp target/release/reedit /usr/bin/
 ### Windows
 
 ```bash
-winget install -e --id Rustlang.Rust.MSVC
 winget install -e --id Git.Git
 
 git clone https://github.com/Edgarmls1/ReEdit.git

@@ -2,7 +2,7 @@ mod editor;
 
 use std::env;
 use std::io;
-use crossterm::event::{self, Event, KeyCode, KeyEvent};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::terminal;
 use editor::Editor;
 
@@ -33,9 +33,21 @@ fn main() -> io::Result<()> {
             match (code, modifiers) {
                 (KeyCode::Esc, _) => {
                     editor.mode = editor::Mode::Command;
+                    editor.visual_start = None;
                 },
                 (KeyCode::Char('i'), _) if matches!(editor.mode, editor::Mode::Command) && editor.command.is_empty() => {
                     editor.mode = editor::Mode::Insert;
+                    editor.visual_start = None;
+                },
+                (KeyCode::Char('v'), _) if matches!(editor.mode, editor::Mode::Command) && editor.command.is_empty() => {
+                    editor.mode = editor::Mode::Visual;
+                    editor.visual_start = Some(editor.cursor_l);
+                },
+                (KeyCode::Char('y'), _) if matches!(editor.mode, editor::Mode::Visual) => {
+                    editor.copy_selected();
+                },
+                (KeyCode::Char('p'), _) if matches!(editor.mode, editor::Mode::Command) && editor.command.is_empty() => {
+                    editor.paste_lines();
                 },
                 (KeyCode::Enter, _) if matches!(editor.mode, editor::Mode::Command) => {
                     if editor.command.starts_with(":e ") {
@@ -117,11 +129,13 @@ fn command_list() {
     println!("|| Keyboard Commands:                                                  ||");
     println!("||    Esc                       - Enter command mode                   ||");
     println!("||    i                         - Enter insert mode                    ||");
+    println!("||    v                         - Enter visual mode                    ||");
     println!("||    :w                        - Save File                            ||");
     println!("||    :q                        - Quit                                 ||");
     println!("||    :wq                       - Save and quit                        ||");
     println!("||    :e <file>                 - Edit new file                        ||");
     println!("||    arrows (Insert Mode)      - Navigate in file                     ||");
     println!("||    arrows (Command Mode)     - Browse files                         ||");
+    println!("||    arrows (Visual Mode)      - Select lines                         ||");
     println!("++=====================================================================++");
 }
