@@ -148,7 +148,7 @@ impl Editor {
                 MoveTo(sidebar_width, y),
                 Clear(ClearType::CurrentLine),
                 if is_selected {
-                    SetBackgroundColor(Color::DarkGrey)
+                    SetForegroundColor(Color::DarkGrey)
                 },
                 if i < 9 {
                     Print(format!("   {}| {}", i + 1, line))
