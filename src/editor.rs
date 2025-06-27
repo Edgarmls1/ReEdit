@@ -7,7 +7,7 @@ use crossterm::style::{Print, ResetColor, SetForegroundColor, SetBackgroundColor
 use crossterm::*;
 use crossterm::terminal::{self, Clear, ClearType};
 
-const SIDEBAR: f32 = 0.2;
+const SIDEBAR: f32 = 0.1;
 
 pub enum Mode {
     Insert,
