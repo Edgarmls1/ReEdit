@@ -2,7 +2,7 @@ mod editor;
 
 use std::env;
 use std::io;
-use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{self, Event, KeyCode, KeyEvent};
 use crossterm::terminal;
 use editor::Editor;
 
@@ -88,7 +88,7 @@ fn main() -> io::Result<()> {
                     editor.adjust_sidebar_scroll();
                 },
                 (KeyCode::Right, _) if matches!(editor.mode, editor::Mode::Command) => {
-                   editor.open_selected(); 
+                   editor.open_selection(); 
                 },
                 (KeyCode::Left, _) if matches!(editor.mode, editor::Mode::Command) => {
                    editor.go_back(); 

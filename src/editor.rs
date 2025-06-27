@@ -3,7 +3,7 @@ use std::env;
 use std::io::{self, BufReader, BufRead, Write, stdout};
 use std::path::{Path, PathBuf};
 use crossterm::cursor::MoveTo;
-use crossterm::style::{Print, ResetColor, SetForegroundColor};
+use crossterm::style::{Print, ResetColor, SetForegroundColor, SetBackgroundColor};
 use crossterm::*;
 use crossterm::terminal::{self, Clear, ClearType};
 
@@ -104,7 +104,7 @@ impl Editor {
         };
 
         let (start, end) = match self.visual_start {
-            Some(start) if self.mode == Mode::Visual => {
+            Some(start) if matches!(self.mode, Mode::Visual) => {
                 if start <= self.cursor_l {
                     (start, self.cursor_l)
                 } else {
@@ -193,7 +193,7 @@ impl Editor {
     pub fn render_file_browser(&mut self) {
         let mut stdout = stdout();
 
-        let (cols, rows) = terminal::size().unwrap();
+        let (cols, _) = terminal::size().unwrap();
 
         let sidebar_width = (SIDEBAR * cols as f32).floor() as u16;
 
@@ -241,7 +241,7 @@ impl Editor {
 
     pub fn draw_cursor(&self) {
         let mut stdout = stdout();
-        let (cols, rows) = terminal::size().unwrap();
+        let (cols, _) = terminal::size().unwrap();
 
         let sidebar_width = (SIDEBAR * cols as f32).floor() as u16;
 
