@@ -44,7 +44,7 @@ fn main() -> io::Result<()> {
                     editor.visual_start = Some(editor.cursor_l);
                 },
                 (KeyCode::Char('y'), _) if matches!(editor.mode, editor::Mode::Visual) => {
-                    editor.copy_selected();
+                    editor.copy_selection();
                 },
                 (KeyCode::Char('p'), _) if matches!(editor.mode, editor::Mode::Command) && editor.command.is_empty() => {
                     editor.paste_lines();
@@ -88,7 +88,7 @@ fn main() -> io::Result<()> {
                     editor.adjust_sidebar_scroll();
                 },
                 (KeyCode::Right, _) if matches!(editor.mode, editor::Mode::Command) => {
-                   editor.open_selection(); 
+                   editor.open_selected(); 
                 },
                 (KeyCode::Left, _) if matches!(editor.mode, editor::Mode::Command) => {
                    editor.go_back(); 

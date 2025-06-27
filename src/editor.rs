@@ -88,7 +88,7 @@ impl Editor {
         let status_color = match self.mode {
             Mode::Command => style::Color::Red,
             Mode::Insert => style::Color::Green,
-            Mode::Visual => style::Color::Purple,
+            Mode::Visual => style::Color::Blue,
         };
 
         let file_name = if self.file_path == "." {
@@ -149,8 +149,6 @@ impl Editor {
                 Clear(ClearType::CurrentLine),
                 if is_selected {
                     SetBackgroundColor(Color::DarkGrey)
-                } else {
-                    ResetColor
                 },
                 if i < 9 {
                     Print(format!("   {}| {}", i + 1, line))
