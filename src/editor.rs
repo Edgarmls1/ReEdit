@@ -150,7 +150,7 @@ impl Editor {
                 if is_selected {
                     SetForegroundColor(style::Color::DarkGrey)
                 } else {
-                    ResetColor
+                    SetForegroundColor(style::Color::White)
                 },
                 if i < 9 {
                     Print(format!("   {}| {}", i + 1, line))
