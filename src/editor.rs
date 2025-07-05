@@ -592,7 +592,7 @@ fn file_icon(file_name: &str) -> &str {
         ""
     } else if file_name.ends_with(".json") {
         "{}"
-    } else if file_name.ends_with(".toml") || file_name.ends_with(".yaml") || file_name.ends_with(".conf") || file_name.ends_with(".config") {
+    } else if file_name.ends_with(".toml") || file_name.ends_with(".yaml") || file_name.ends_with(".conf") || file_name.ends_with(".config") || file_name.starts_with(".") {
         "⚙️"
     } else if file_name.ends_with(".sh") {
         ">_"
